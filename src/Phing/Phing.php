@@ -59,7 +59,6 @@ use function strlen;
 use function strval;
 use function trim;
 
-use const DATE_RFC7231;
 use const PHP_EOL;
 
 /**
@@ -214,7 +213,9 @@ class Phing
     private $emacsMode = false;
 
     /**
-     * @var string
+     * What to search for, passed as arguments.
+     *
+     * @var ?string
      */
     private $searchForThis;
     private $propertyFiles = [];
@@ -560,29 +561,29 @@ class Phing
         $msg = <<<'TEXT'
             phing [options] [target [target2 [target3] ...]]
             Options:
-              -h -help                 print this message
-              -l -list                 list available targets in this project
-              -i -init [file]          generates an initial buildfile
-              -v -version              print the version information and exit
-              -q -quiet                be extra quiet
-              -S -silent               print nothing but task outputs and build failures
-                 -verbose              be extra verbose
-                 -debug                print debugging information
-              -e -emacs                produce logging information without adornments
-                 -diagnostics          print diagnostics information
-                 -strict               runs build in strict mode, considering a warning as error
-                 -no-strict            runs build normally (overrides buildfile attribute)
-                 -longtargets          show target descriptions during build
-                 -logfile <file>       use given file for log
-                 -logger <classname>   the class which is to perform logging
-                 -listener <classname> add an instance of class as a project listener
-              -f -buildfile <file>     use given buildfile
-                 -D<property>=<value>  use value for given property
-              -k -keep-going           execute all targets that do not depend on failed target(s)
-                 -propertyfile <file>  load all properties from file
-                 -propertyfileoverride values in property file override existing values
-                 -find <file>          search for buildfile towards the root of the filesystem and use it
-                 -inputhandler <file>  the class to use to handle user input
+              -h -help                     print this message
+              -l -list                     list available targets in this project
+              -i -init [file]              generates an initial buildfile
+              -v -version                  print the version information and exit
+              -q -quiet                    be extra quiet
+              -S -silent                   print nothing but task outputs and build failures
+                 -verbose                  be extra verbose
+                 -debug                    print debugging information
+              -e -emacs                    produce logging information without adornments
+                 -diagnostics              print diagnostics information
+                 -strict                   runs build in strict mode, considering a warning as error
+                 -no-strict                runs build normally (overrides buildfile attribute)
+                 -longtargets              show target descriptions during build
+                 -logfile <file>           use given file for log
+                 -logger <classname>       the class which is to perform logging
+                 -listener <classname>     add an instance of class as a project listener
+              -f -buildfile <file>         use given buildfile
+                 -D<property>=<value>      use value for given property
+              -k -keep-going               execute all targets that do not depend on failed target(s)
+                 -propertyfile <file>      load all properties from file
+                 -propertyfileoverride     values in property file override existing values
+                 -find <file>              search for buildfile towards the root of the filesystem and use it
+                 -inputhandler <classname> the class to use to handle user input
 
             Report bugs to https://github.com/phingofficial/phing/issues
 
@@ -1667,7 +1668,7 @@ class Phing
         self::setProperty(self::PHP_VERSION, PHP_VERSION);
         self::setProperty('php.tmpdir', sys_get_temp_dir());
         self::setProperty('application.startdir', getcwd());
-        self::setProperty('phing.startTime', gmdate(DATE_RFC7231));
+        self::setProperty('phing.startTime', gmdate(\DateTimeInterface::RFC2822));
 
         // try to detect machine dependent information
         $sysInfo = [];
